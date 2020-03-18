@@ -23,6 +23,8 @@ class NativeAdmob extends StatefulWidget {
   final bool isAutoReload;
   final int autoReloadTime;
 
+  final double adHeight;
+
   NativeAdmob({
     Key key,
     @required this.adUnitID,
@@ -33,6 +35,7 @@ class NativeAdmob extends StatefulWidget {
     this.controller,
     this.isAutoReload: false,
     this.autoReloadTime: 3,
+    this.adHeight: 62,
   })  : assert(adUnitID.isNotEmpty),
         super(key: key);
 
@@ -101,7 +104,7 @@ class _NativeAdmobState extends State<NativeAdmob> {
     };
 
     return Container(
-      height: 62,
+      height: widget.adHeight,
       child: isAndroid
           ? AndroidView(
         viewType: _viewType,
