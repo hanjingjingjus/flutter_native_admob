@@ -8,6 +8,8 @@ enum AdLoadState { loading, loadError, loadCompleted }
 class NativeAdmobController {
   final _key = UniqueKey();
   final bool isAutoReload;
+  final int autoReloadTime;
+  int remainReloadTime;
   String get id => _key.toString();
 
   final _stateChanged = StreamController<AdLoadState>.broadcast();
@@ -18,10 +20,10 @@ class NativeAdmobController {
   MethodChannel _channel;
   String _adUnitID;
 
-  NativeAdmobController({this.isAutoReload: false}) {
+  NativeAdmobController({this.isAutoReload: false, this.autoReloadTime: 3}) {
     _channel = MethodChannel(id);
     _channel.setMethodCallHandler(_handleMessages);
-
+    remainReloadTime=autoReloadTime;
     // Let the plugin know there is a new controller
     _pluginChannel.invokeMethod("initController", {
       "controllerID": id,
@@ -39,12 +41,18 @@ class NativeAdmobController {
       case "loadError":
         _stateChanged.add(AdLoadState.loadError);
         //失败自动重新加载
-        if(isAutoReload){
-          reloadAd(forceRefresh: true);
+        if (isAutoReload && remainReloadTime > 0) {
+          remainReloadTime--;
+          if (_adUnitID != null) {
+            _channel.invokeMethod("reloadAd", {
+              "forceRefresh": true,
+            });
+          }
         }
         break;
 
       case "loadCompleted":
+        remainReloadTime = autoReloadTime;
         _stateChanged.add(AdLoadState.loadCompleted);
         break;
     }
@@ -62,6 +70,7 @@ class NativeAdmobController {
   ///
   ///  * [forceRefresh], force reload a new ad or using cache ad
   void reloadAd({bool forceRefresh = false}) {
+    remainReloadTime = autoReloadTime;
     if (_adUnitID == null) return;
 
     _channel.invokeMethod("reloadAd", {

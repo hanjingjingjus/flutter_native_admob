@@ -21,6 +21,7 @@ class NativeAdmob extends StatefulWidget {
 
   //失败是否重新加载
   final bool isAutoReload;
+  final int autoReloadTime;
 
   NativeAdmob({
     Key key,
@@ -31,6 +32,7 @@ class NativeAdmob extends StatefulWidget {
     this.error,
     this.controller,
     this.isAutoReload: false,
+    this.autoReloadTime: 3,
   })  : assert(adUnitID.isNotEmpty),
         super(key: key);
 
@@ -57,7 +59,7 @@ class _NativeAdmobState extends State<NativeAdmob> {
   @override
   void initState() {
     _nativeAdController = widget.controller ??
-        NativeAdmobController(isAutoReload: widget.isAutoReload);
+        NativeAdmobController(isAutoReload: widget.isAutoReload,);
     _nativeAdController.setAdUnitID(widget.adUnitID);
 
     _subscription = _nativeAdController.stateChanged.listen((state) {
