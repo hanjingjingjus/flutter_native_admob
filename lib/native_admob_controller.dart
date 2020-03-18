@@ -7,6 +7,7 @@ enum AdLoadState { loading, loadError, loadCompleted }
 
 class NativeAdmobController {
   final _key = UniqueKey();
+  final bool isAutoReload;
   String get id => _key.toString();
 
   final _stateChanged = StreamController<AdLoadState>.broadcast();
@@ -17,7 +18,7 @@ class NativeAdmobController {
   MethodChannel _channel;
   String _adUnitID;
 
-  NativeAdmobController() {
+  NativeAdmobController({this.isAutoReload: false}) {
     _channel = MethodChannel(id);
     _channel.setMethodCallHandler(_handleMessages);
 
@@ -37,6 +38,10 @@ class NativeAdmobController {
 
       case "loadError":
         _stateChanged.add(AdLoadState.loadError);
+        //失败自动重新加载
+        if(isAutoReload){
+          reloadAd(forceRefresh: true);
+        }
         break;
 
       case "loadCompleted":
