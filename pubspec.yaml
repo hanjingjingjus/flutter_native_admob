@@ -1,0 +1,16 @@
+name: flutter_native_admob
+description: Plugin to integrate Firebase Native Admob to Flutter application. Both iOS and Android supported
+version: 2.0.0+2
+homepage: https://github.com/duyduong/flutter_native_admob
+
+environment:
+  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+flutter:
+  plugin:
+    androidPackage: com.nover.flutternativeadmob
+    pluginClass: FlutterNativeAdmobPlugin
