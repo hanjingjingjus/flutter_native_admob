@@ -9,86 +9,66 @@ import UIKit
 import GoogleMobileAds
 
 class NativeAdView: GADUnifiedNativeAdView {
-    
+    //左上角Ad
     let adLabelLbl: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 12)
-        label.textColor = .white
+        label.textColor = UIColor(red: 0, green: 0.67, blue: 0.53, alpha: 1)
         label.text = "Ad"
         return label
     }()
     
     lazy var adLabelView: UIView = {
         let view = UIView()
-        view.backgroundColor = .fromHex("FFCC66")
         view.layer.cornerRadius = 3
+        view.layer.borderColor = UIColor(red: 0, green: 0.67, blue: 0.53, alpha: 1).cgColor
+        view.layer.borderWidth = 1
         view.clipsToBounds = true
         view.addSubview(adLabelLbl)
-        adLabelLbl.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 1, left: 3, bottom: 1, right: 3))
-        
+        view.autoSetDimensions(to: CGSize(width: 22, height: 14))
+        adLabelLbl.autoCenterInSuperview()
         return view
     }()
     
-    let adMediaView = GADMediaView()
-    
+    //左边图标
     let adIconView: UIImageView = {
         let imageView = UIImageView()
         imageView.autoSetDimensions(to: CGSize(width: 40, height: 40))
+        imageView.layer.cornerRadius=6
         return imageView
     }()
     
+    //标题
     let adHeadLineLbl: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 16)
+        label.font = UIFont(name: "Roboto Medium", size: 16)
+        label.textColor=UIColor(red: 0.15, green: 0.15, blue: 0.15, alpha: 1)
         label.numberOfLines = 1
         return label
     }()
     
-    let adAdvertiserLbl: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 14)
-        label.numberOfLines = 1
-        return label
-    }()
-    
-    let adRatingView = StackLayout().spacing(2)
-    
+    //内容 只显示一行
     let adBodyLbl: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12)
-        label.numberOfLines = 2
+        label.font = UIFont(name: "Roboto Regular", size: 12)
+        label.textColor=UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1)
+        label.numberOfLines = 1
         return label
     }()
     
-    let adPriceLbl: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12)
-        label.numberOfLines = 2
-        return label
-    }()
-    
-    let adStoreLbl: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12)
-        label.numberOfLines = 2
-        return label
-    }()
-    
+    //打开按钮
     let callToActionBtn: UIButton = {
         let button = UIButton()
-        button.setBackgroundImage(.from(color: .fromHex("#4CBE99")), for: .normal)
+        button.setBackgroundImage(.from(color: .fromHex("#00AB88")), for: .normal)
         button.setTitleColor(.white, for: .normal)
+        button.layer.cornerRadius=6
+        button.clipsToBounds = true
         button.titleLabel?.font = UIFont.systemFont(ofSize: 15)
-        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
-        button.autoSetDimension(.height, toSize: 30)
+        //        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
+        //        button.autoSetDimension(.height, toSize: 32)
+        button.autoSetDimensions(to: CGSize(width: 71,height: 32))
         return button
     }()
-    
-    var starIcon: StarIcon {
-        let icon = StarIcon()
-        icon.autoSetDimensions(to: CGSize(width: 15, height: 15))
-        return icon
-    }
     
     var options = NativeAdmobOptions() {
         didSet { updateOptions() }
@@ -110,7 +90,7 @@ class NativeAdView: GADUnifiedNativeAdView {
         
         // Set the mediaContent on the GADMediaView to populate it with available
         // video/image asset.
-        adMediaView.mediaContent = nativeAd.mediaContent
+        //        adMediaView.mediaContent = nativeAd.mediaContent
         
         // Populate the native ad view with the native ad assets.
         // The headline is guaranteed to be present in every native ad.
@@ -127,26 +107,6 @@ class NativeAdView: GADUnifiedNativeAdView {
         adIconView.image = nativeAd.icon?.image
         adIconView.isHidden = nativeAd.icon == nil
         
-        adRatingView.arrangedSubviews.forEach { view in
-            view.removeFromSuperview()
-        }
-        let numOfStars = Int(truncating: nativeAd.starRating ?? 0)
-        adRatingView.children(Array(0..<numOfStars).map { _ in
-            let icon = self.starIcon
-            icon.color = options.ratingColor
-            return icon
-        })
-        adRatingView.isHidden = nativeAd.starRating == nil
-        
-        adStoreLbl.text = nativeAd.store
-        adStoreLbl.isHidden = nativeAd.store.isNilOrEmpty
-        
-        adPriceLbl.text = nativeAd.price
-        adPriceLbl.isHidden = nativeAd.price.isNilOrEmpty
-        
-        adAdvertiserLbl.text = nativeAd.advertiser
-        adAdvertiserLbl.isHidden = nativeAd.advertiser.isNilOrEmpty
-        
         // In order for the SDK to process touch events properly, user interaction
         // should be disabled.
         callToActionBtn.isUserInteractionEnabled = false
@@ -156,84 +116,41 @@ class NativeAdView: GADUnifiedNativeAdView {
 private extension NativeAdView {
     
     func setupView() {
-        self.mediaView = adMediaView
+        //        self.mediaView = adMediaView
+        //标题
         self.headlineView = adHeadLineLbl
+        //按钮
         self.callToActionView = callToActionBtn
+        //图标
         self.iconView = adIconView
+        //内容
         self.bodyView = adBodyLbl
-        self.storeView = adStoreLbl
-        self.priceView = adPriceLbl
-        self.starRatingView = adRatingView
-        self.advertiserView = adAdvertiserLbl
         
-        let infoLayout = StackLayout().spacing(5).children([
+        let infoLayout = StackLayout().direction(.horizontal).children([
             adIconView,
-            StackLayout().direction(.vertical).children([
+            StackViewItem(view:  StackLayout().direction(.vertical).children([
                 adHeadLineLbl,
-                StackLayout().children([
-                    adAdvertiserLbl,
-                    adRatingView,
-                    UIView()
-                ])
-            ]),
+                adBodyLbl
+            ]),attribute: .fill(insets: UIEdgeInsets(top: 0, left: 7, bottom: 0, right: 12))),
+            
+            StackViewItem(view: callToActionBtn,attribute: .center(insets: .zero)),
         ])
-        
-        let actionLayout = StackLayout()
-            .alignItems(.center)
-            .spacing(5)
-            .children([
-                UIView(),
-                StackViewItem(view: adPriceLbl, attribute: .fill(insets: .zero)),
-                StackViewItem(view: adStoreLbl, attribute: .fill(insets: .zero)),
-                callToActionBtn
-            ])
         
         let holderView = UIView()
         holderView.addSubview(adLabelView)
-        adLabelView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .trailing)
+        infoLayout.autoSetDimensions(to: CGSize(width: .zero, height: 40))
         
         let mainLayout = StackLayout()
             .direction(.vertical)
-            .spacing(5)
             .children([
                 holderView,
-                adMediaView,
-                infoLayout,
-                StackViewItem(view: adBodyLbl, attribute: .fill(insets: .zero)),
-                actionLayout
+                StackViewItem(view:infoLayout,attribute: .fill(insets: UIEdgeInsets(top: 2, left: 0, bottom: 4, right: 0))),
+                
             ])
         addSubview(mainLayout)
-        mainLayout.autoPinEdgesToSuperviewEdges()
+        mainLayout.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 14, bottom: 0, right: 16))
     }
     
     func updateOptions() {
-        adMediaView.isHidden = !options.showMediaContent
-        
-        adLabelLbl.textColor = options.adLabelTextStyle.color
-        adLabelLbl.font = UIFont.systemFont(ofSize: options.adLabelTextStyle.fontSize)
-        adLabelView.backgroundColor = options.adLabelTextStyle.backgroundColor ?? .fromHex("FFCC66")
-        
-        adHeadLineLbl.textColor = options.headlineTextStyle.color
-        adHeadLineLbl.font = UIFont.systemFont(ofSize: options.headlineTextStyle.fontSize)
-        
-        adAdvertiserLbl.textColor = options.advertiserTextStyle.color
-        adAdvertiserLbl.font = UIFont.systemFont(ofSize: options.advertiserTextStyle.fontSize)
-        
-        adBodyLbl.textColor = options.bodyTextStyle.color
-        adBodyLbl.font = UIFont.systemFont(ofSize: options.bodyTextStyle.fontSize)
-        
-        adStoreLbl.textColor = options.storeTextStyle.color
-        adStoreLbl.font = UIFont.systemFont(ofSize: options.storeTextStyle.fontSize)
-        
-        adPriceLbl.textColor = options.priceTextStyle.color
-        adPriceLbl.font = UIFont.systemFont(ofSize: options.priceTextStyle.fontSize)
-        
-        callToActionBtn.setTitleColor(options.callToActionStyle.color, for: .normal)
-        callToActionBtn.titleLabel?.font = UIFont.systemFont(ofSize: options.callToActionStyle.fontSize)
-        if let bgColor = options.callToActionStyle.backgroundColor {
-            callToActionBtn.setBackgroundImage(.from(color: bgColor), for: .normal)
-        }
-        
-        starIcon.color = options.ratingColor
     }
 }
