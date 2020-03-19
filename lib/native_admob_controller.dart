@@ -57,6 +57,9 @@ class NativeAdmobController {
         break;
       case "leftApplication":
         _stateChanged.add(AdLoadState.leftApplication);
+
+        //点击广告后返回刷新
+        reloadAd(forceRefresh: true);
         break;
     }
   }
