@@ -25,6 +25,8 @@ class NativeAdmob extends StatefulWidget {
 
   final double adHeight;
 
+  final List<String> testDevices;
+
   NativeAdmob({
     Key key,
     @required this.adUnitID,
@@ -36,6 +38,7 @@ class NativeAdmob extends StatefulWidget {
     this.isAutoReload: false,
     this.autoReloadTime: 3,
     this.adHeight: 62,
+    this.testDevices,
   })  : assert(adUnitID.isNotEmpty),
         super(key: key);
 
@@ -62,8 +65,10 @@ class _NativeAdmobState extends State<NativeAdmob> {
   @override
   void initState() {
     _nativeAdController = widget.controller ??
-        NativeAdmobController(isAutoReload: widget.isAutoReload,);
-    _nativeAdController.setAdUnitID(widget.adUnitID);
+        NativeAdmobController(isAutoReload: widget.isAutoReload,
+            autoReloadTime: widget.autoReloadTime);
+    _nativeAdController.setAdUnitID(
+        widget.adUnitID, testDevices: widget.testDevices);
 
     _subscription = _nativeAdController.stateChanged.listen((state) {
       setState(() {
@@ -100,11 +105,12 @@ class _NativeAdmobState extends State<NativeAdmob> {
     final creationParams = {
       "options": _options.toJson(),
       "adType": widget.adType??"",
-      "controllerID": _nativeAdController.id
+      "controllerID": _nativeAdController.id,
     };
 
     return Container(
       height: widget.adHeight,
+      color: Colors.white,
       child: isAndroid
           ? AndroidView(
         viewType: _viewType,

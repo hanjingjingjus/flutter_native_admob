@@ -13,9 +13,15 @@ class NativeAdmobController: NSObject {
         case setAdUnitID
         case reloadAd
     }
-    
+//    loaded,
+//    failedToLoad,
+//    clicked,
+//    impression,
+//    opened,
+//    leftApplication,
+//    closed,
     enum LoadState: String {
-        case loading, loadError, loadCompleted
+        case loading, loadError, loadCompleted, leftApplication
     }
     
     let id: String
@@ -94,6 +100,34 @@ extension NativeAdmobController: GADUnifiedNativeAdLoaderDelegate {
     func adLoader(_ adLoader: GADAdLoader, didReceive nativeAd: GADUnifiedNativeAd) {
         self.nativeAd = nativeAd
     }
+}
+
+// MARK: - GADUnifiedNativeAdDelegate implementation
+extension NativeAdmobController : GADUnifiedNativeAdDelegate {
+
+  func nativeAdDidRecordClick(_ nativeAd: GADUnifiedNativeAd) {
+    print("\(#function) called")
+  }
+
+  func nativeAdDidRecordImpression(_ nativeAd: GADUnifiedNativeAd) {
+    print("\(#function) called")
+  }
+
+  func nativeAdWillPresentScreen(_ nativeAd: GADUnifiedNativeAd) {
+    print("\(#function) called")
+  }
+
+  func nativeAdWillDismissScreen(_ nativeAd: GADUnifiedNativeAd) {
+    print("\(#function) called")
+  }
+
+  func nativeAdDidDismissScreen(_ nativeAd: GADUnifiedNativeAd) {
+    print("\(#function) called")
+  }
+
+  func nativeAdWillLeaveApplication(_ nativeAd: GADUnifiedNativeAd) {
+    channel.invokeMethod(LoadState.leftApplication.rawValue, arguments: nil)
+  }
 }
 
 class NativeAdmobControllerManager {

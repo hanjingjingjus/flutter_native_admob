@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-enum AdLoadState { loading, loadError, loadCompleted }
+enum AdLoadState { loading, loadError, loadCompleted ,leftApplication}
 
 class NativeAdmobController {
   final _key = UniqueKey();
@@ -30,7 +30,7 @@ class NativeAdmobController {
     });
   }
 
-  void dispose() {}
+  void dispose() {_stateChanged.close();}
 
   Future<Null> _handleMessages(MethodCall call) async {
     switch (call.method) {
@@ -55,14 +55,18 @@ class NativeAdmobController {
         remainReloadTime = autoReloadTime;
         _stateChanged.add(AdLoadState.loadCompleted);
         break;
+      case "leftApplication":
+        _stateChanged.add(AdLoadState.leftApplication);
+        break;
     }
   }
 
   /// Change the ad unit ID
-  void setAdUnitID(String adUnitID) {
+  void setAdUnitID(String adUnitID, {List<String> testDevices}) {
     _adUnitID = adUnitID;
     _channel.invokeMethod("setAdUnitID", {
       "adUnitID": adUnitID,
+      "testDevices": testDevices == null ? [] : testDevices,
     });
   }
 

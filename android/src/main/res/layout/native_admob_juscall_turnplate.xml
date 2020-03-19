@@ -80,7 +80,7 @@
 
                 <Button
                     android:id="@+id/ad_call_to_action_turn"
-                    android:layout_width="wrap_content"
+                    android:layout_width="71dp"
                     android:layout_height="32dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="12dp"
