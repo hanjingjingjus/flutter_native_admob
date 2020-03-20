@@ -106,26 +106,27 @@ extension NativeAdmobController: GADUnifiedNativeAdLoaderDelegate {
 extension NativeAdmobController : GADUnifiedNativeAdDelegate {
 
   func nativeAdDidRecordClick(_ nativeAd: GADUnifiedNativeAd) {
-    print("\(#function) called")
+    print("nativeAdDidRecordClick called")
   }
 
   func nativeAdDidRecordImpression(_ nativeAd: GADUnifiedNativeAd) {
-    print("\(#function) called")
+    print("nativeAdDidRecordImpression called")
   }
 
   func nativeAdWillPresentScreen(_ nativeAd: GADUnifiedNativeAd) {
-    print("\(#function) called")
+    print("nativeAdWillPresentScreen called")
   }
 
   func nativeAdWillDismissScreen(_ nativeAd: GADUnifiedNativeAd) {
-    print("\(#function) called")
+    print("nativeAdWillDismissScreen called")
   }
 
   func nativeAdDidDismissScreen(_ nativeAd: GADUnifiedNativeAd) {
-    print("\(#function) called")
+    print("nativeAdDidDismissScreen called")
   }
 
   func nativeAdWillLeaveApplication(_ nativeAd: GADUnifiedNativeAd) {
+    print("nativeAdWillLeaveApplication called")
     channel.invokeMethod(LoadState.leftApplication.rawValue, arguments: nil)
   }
 }

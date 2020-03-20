@@ -53,6 +53,7 @@ class NativeAdView: GADUnifiedNativeAdView {
         label.font = UIFont(name: "Roboto Regular", size: 12)
         label.textColor=UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1)
         label.numberOfLines = 1
+        label.lineBreakMode = NSLineBreakMode.byTruncatingTail
         return label
     }()
     
@@ -144,7 +145,7 @@ private extension NativeAdView {
             .direction(.vertical)
             .children([
                 holderView,
-                StackViewItem(view:infoLayout,attribute: .fill(insets: UIEdgeInsets(top: 2, left: 0, bottom: 4, right: 0))),
+                StackViewItem(view:infoLayout,attribute: .fill(insets: UIEdgeInsets(top: 2, left: 0, bottom: 0, right: 0))),
                 
             ])
         addSubview(mainLayout)
