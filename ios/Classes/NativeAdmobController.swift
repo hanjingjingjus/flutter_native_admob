@@ -98,6 +98,8 @@ extension NativeAdmobController: GADUnifiedNativeAdLoaderDelegate {
     }
     
     func adLoader(_ adLoader: GADAdLoader, didReceive nativeAd: GADUnifiedNativeAd) {
+        print("NativeAdmob: didReceive")
+        nativeAd.delegate = self
         self.nativeAd = nativeAd
     }
 }
