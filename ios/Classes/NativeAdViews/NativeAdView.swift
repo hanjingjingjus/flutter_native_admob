@@ -44,6 +44,7 @@ class NativeAdView: GADUnifiedNativeAdView {
         label.font = UIFont(name: "Roboto Medium", size: 16)
         label.textColor=UIColor(red: 0.15, green: 0.15, blue: 0.15, alpha: 1)
         label.numberOfLines = 1
+        label.lineBreakMode = NSLineBreakMode.byTruncatingTail
         return label
     }()
     
