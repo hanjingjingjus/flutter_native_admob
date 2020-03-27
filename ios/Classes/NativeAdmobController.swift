@@ -21,7 +21,7 @@ class NativeAdmobController: NSObject {
 //    leftApplication,
 //    closed,
     enum LoadState: String {
-        case loading, loadError, loadCompleted, leftApplication
+        case loading, loadError, loadCompleted,impression, leftApplication
     }
     
     let id: String
@@ -113,6 +113,7 @@ extension NativeAdmobController : GADUnifiedNativeAdDelegate {
 
   func nativeAdDidRecordImpression(_ nativeAd: GADUnifiedNativeAd) {
     print("nativeAdDidRecordImpression called")
+    channel.invokeMethod(LoadState.impression.rawValue, arguments: nil)
   }
 
   func nativeAdWillPresentScreen(_ nativeAd: GADUnifiedNativeAd) {

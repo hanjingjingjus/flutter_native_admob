@@ -20,7 +20,7 @@ class NativeAdmobController(
     }
 
     enum class LoadState {
-        loading, loadError, loadCompleted, leftApplication
+        loading, loadError, loadCompleted,impression, leftApplication
     }
 
     var nativeAdChanged: ((UnifiedNativeAd?) -> Unit)? = null
@@ -58,6 +58,10 @@ class NativeAdmobController(
                             override fun onAdLeftApplication() {
                                 println("leftApplication")
                                 channel.invokeMethod(LoadState.leftApplication.toString(), null)
+                            }
+                            override fun onAdImpression() {
+                                println("onAdImpression")
+                                channel.invokeMethod(LoadState.impression.toString(), null)
                             }
                         }).build()
                     }
